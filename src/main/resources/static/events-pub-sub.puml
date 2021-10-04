@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor ConnectedClient as Client
+participant PractoCorePlaform as Core
+participant PractoCloud as PC
+participant MQTTBroker as MB
+participant DataBase as DB
+
+
+loop infinite timesa
+    Core -> PC: Emits new events to the PractoCloud
+    note right of Core
+        PractoCore emits all the available events
+        to the PractoCloud platform with required data
+    end note
+
+    PC -> MB: publishes messages to the MQTTBroker
+    note right of PC
+        PractoCloud publishes all the
+        incoming messages to the MQTTBroker
+    end note
+end loop
+
+Client -> PC: Register Request
+PC -> Client: API Key with scope
+
+Client -> PC: Connect Request
+PC -> MB: Connection Request
+MB -> DB: persist in DB
+MB -> PC: CONACK packet
+
+PC -> Client: Connection Ack
+
+loop infinite times
+    MB -> PC: send the message published
+    PC -> Client: send the message published
+end loop
+@enduml
