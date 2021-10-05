@@ -24,11 +24,29 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="d3e5ede3-d23c-4961-8e1e-875a75553733">
+        <schema name="mysql" object-types="table, view, function" />
+        <schema name="neeraj" object-types="table, view, procedure, function, constraint, index, column, dataset trigger" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="d3e5ede3-d23c-4961-8e1e-875a75553733">
-      <console name="localhost" type="STANDARD" schema="mysql" session="Main" />
+      <console name="localhost" type="STANDARD" schema="neeraj" session="Main"><![CDATA[select
+    ak.created_at,
+    ak.created_by,
+    ak.external_id,
+    ak.id,
+    ak.is_active,
+    ak.name,
+    ak.prefix,
+    ak.scopes,
+    ak.updated_at,
+    ak.updated_by,
+    ak.`value`
+from
+    api_keys ak;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">

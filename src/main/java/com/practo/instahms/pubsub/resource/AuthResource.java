@@ -6,6 +6,7 @@ import com.practo.instahms.pubsub.domain.request.AuthTokenValidateRequest;
 import com.practo.instahms.pubsub.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +35,7 @@ public class AuthResource {
         if (Objects.isNull(token)) {
             return ResponseEntity.internalServerError().build();
         }
-
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.status( HttpStatus.CREATED ).body(token);
     }
 
     @GetMapping("/search")

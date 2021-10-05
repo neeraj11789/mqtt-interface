@@ -22,6 +22,7 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "client")
 @Where(clause = "is_active = 1")
 public class Client extends BaseDomain{
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
