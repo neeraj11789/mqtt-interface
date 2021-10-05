@@ -6,12 +6,13 @@ import com.practo.instahms.pubsub.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Null;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
@@ -20,7 +21,7 @@ import java.util.Objects;
  */
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping("/v1/auth/token")
 @Slf4j
 public class AuthResource {
 
@@ -35,5 +36,28 @@ public class AuthResource {
         }
 
         return ResponseEntity.ok().body(token);
+    }
+
+    @GetMapping("/search")
+    private ResponseEntity<List<AuthToken>> searchToken(final @RequestParam(value = "external_id", required = false) String externalId,
+                                                        final @RequestParam(required = false) String name,
+                                                        final @RequestParam(required = false) String prefix){
+
+        final Optional<List<AuthToken>> optionalAuthTokens = service.search( externalId, prefix, name );
+        return optionalAuthTokens.map( authTokens -> ResponseEntity.ok().body( authTokens ) ).orElseGet( () -> ResponseEntity.notFound().build() );
+    }
+
+    @GetMapping("/{externalId}")
+    private ResponseEntity<AuthToken> getToken(final @PathVariable String externalId){
+
+        final Optional<AuthToken> optionalAuthToken = service.getToken( externalId);
+        return optionalAuthToken.map( authToken -> ResponseEntity.ok().body( authToken ) ).orElseGet( () -> ResponseEntity.notFound().build() );
+    }
+
+    @GetMapping("/internal/{id}")
+    private ResponseEntity<AuthToken> getTokenByInternalId(final @PathVariable Long id){
+
+        final Optional<AuthToken> optionalAuthToken = service.getToken( id);
+        return optionalAuthToken.map( authToken -> ResponseEntity.ok().body( authToken ) ).orElseGet( () -> ResponseEntity.notFound().build() );
     }
 }

@@ -5,9 +5,12 @@ import com.practo.instahms.pubsub.domain.repository.AuthTokenRepository;
 import com.practo.instahms.pubsub.domain.request.AuthTokenRequest;
 import com.practo.instahms.pubsub.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,5 +38,19 @@ public class AuthService {
         token.setPrefix( Utils.generateTokenPrefix() );
         token.setValue( Base64.getEncoder().encodeToString( Utils.generateToken().getBytes() ) );
         return token;
+    }
+
+    public Optional<List<AuthToken>> search(final String externalId, final String prefix, final String name) {
+//        final List<AuthToken> tokens = repository.search( externalId, prefix, name );
+        final List<AuthToken> tokens = repository.search( externalId, prefix, name );
+        return Optional.ofNullable( tokens );
+    }
+
+    public Optional<AuthToken> getToken(final String externalId) {
+        return repository.findByExternalIdEquals( externalId );
+    }
+
+    public Optional<AuthToken> getToken(final Long id) {
+        return repository.findById( id );
     }
 }
