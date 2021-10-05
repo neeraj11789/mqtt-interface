@@ -2,6 +2,7 @@ package com.practo.instahms.pubsub.resource;
 
 import com.practo.instahms.pubsub.domain.AuthToken;
 import com.practo.instahms.pubsub.domain.request.AuthTokenRequest;
+import com.practo.instahms.pubsub.domain.request.AuthTokenValidateRequest;
 import com.practo.instahms.pubsub.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 
 @RestController
-@RequestMapping("/v1/auth/token")
+@RequestMapping("/v1/auth-token")
 @Slf4j
 public class AuthResource {
 
@@ -29,7 +29,7 @@ public class AuthResource {
     private AuthService service;
 
     @PostMapping()
-    private ResponseEntity<AuthToken> register(final @RequestBody AuthTokenRequest request){
+    private ResponseEntity<AuthToken> register(final @Valid @RequestBody AuthTokenRequest request){
         final AuthToken token = service.registerNewKey( request );
         if (Objects.isNull(token)) {
             return ResponseEntity.internalServerError().build();
@@ -59,5 +59,11 @@ public class AuthResource {
 
         final Optional<AuthToken> optionalAuthToken = service.getToken( id);
         return optionalAuthToken.map( authToken -> ResponseEntity.ok().body( authToken ) ).orElseGet( () -> ResponseEntity.notFound().build() );
+    }
+
+    @PostMapping("/validate")
+    private ResponseEntity<Object> validate(final @Valid @RequestBody AuthTokenValidateRequest request){
+        final Boolean isValidToken = service.validateToken( request );
+        return Optional.of( isValidToken ).filter( v -> v.equals( true ) ).map( v -> ResponseEntity.noContent().build() ).orElseGet( () -> ResponseEntity.badRequest().build() );
     }
 }

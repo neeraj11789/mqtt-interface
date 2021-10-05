@@ -32,4 +32,6 @@ public interface AuthTokenRepository extends JpaRepository<AuthToken, Long> {
     List<AuthToken> search(@Param("externalId") @Nullable String externalId, @Param("prefix") @Nullable String prefix, @Param("name") @Nullable String name);
 
     Optional<AuthToken> findByExternalIdEquals(@NonNull String externalId);
+
+    Optional<AuthToken> findByValueEquals(@NonNull String value);
 }
