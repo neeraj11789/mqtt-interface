@@ -34,4 +34,8 @@ public class AuthToken extends BaseDomain{
 
     private String scopes;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
 }

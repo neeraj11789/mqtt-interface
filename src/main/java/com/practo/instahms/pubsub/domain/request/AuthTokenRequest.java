@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,6 +18,9 @@ public class AuthTokenRequest implements Serializable {
 
     @NotBlank
     private String name;
+
+    @NotBlank
+    private String clientId;
 
     @NotEmpty
     private List<String> scopes;

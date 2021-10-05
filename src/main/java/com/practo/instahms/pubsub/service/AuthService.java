@@ -1,6 +1,7 @@
 package com.practo.instahms.pubsub.service;
 
 import com.practo.instahms.pubsub.domain.AuthToken;
+import com.practo.instahms.pubsub.domain.Client;
 import com.practo.instahms.pubsub.domain.repository.AuthTokenRepository;
 import com.practo.instahms.pubsub.domain.request.AuthTokenRequest;
 import com.practo.instahms.pubsub.domain.request.AuthTokenValidateRequest;
@@ -26,6 +27,9 @@ public class AuthService {
     @Autowired
     AuthTokenRepository repository;
 
+    @Autowired
+    ClientService service;
+
     public AuthToken registerNewKey(final AuthTokenRequest request) {
         final AuthToken token = createNewToken(request);
         repository.save( token );
@@ -34,6 +38,9 @@ public class AuthService {
 
     private AuthToken createNewToken(final AuthTokenRequest request) {
         final AuthToken token = new AuthToken();
+        final Optional<Client> optionalClient = service.getClient( request.getClientId() );
+        final Client client = optionalClient.orElseThrow( () -> new RuntimeException( "Client Not Found" ) );
+        token.setClient( client );
         token.setName( request.getName() );
         final String scopes = request.getScopes().stream().collect( Collectors.joining( "," ) );
         token.setScopes( scopes );
