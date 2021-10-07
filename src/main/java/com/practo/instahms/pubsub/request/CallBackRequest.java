@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
-import org.springframework.http.HttpHeaders;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Map;
@@ -26,15 +25,15 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CallBackRequest {
 
+    @NonNull
     private HttpMethod method;
 
     @NotBlank
     private String url;
 
-    @NonNull
     private JsonNode body;
 
-    private HttpHeaders headers;
+    private Map<String, String> headers;
 
-    private Map<String, Object> options;
+    private Map<String, Object> pathVariables;
 }

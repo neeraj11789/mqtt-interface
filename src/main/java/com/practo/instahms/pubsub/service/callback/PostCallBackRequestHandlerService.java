@@ -3,7 +3,6 @@ package com.practo.instahms.pubsub.service.callback;
 import com.practo.instahms.pubsub.request.CallBackRequest;
 import com.practo.instahms.pubsub.util.HttpMethod;
 import okhttp3.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,21 +15,21 @@ import java.io.IOException;
 @Service
 public class PostCallBackRequestHandlerService extends CallbackRequestHandlerBaseService<HttpMethod> {
 
-    @Autowired
-    private OkHttpClient client;
-
     public PostCallBackRequestHandlerService() {
         super( HttpMethod.POST );
     }
 
     @Override
-    public void execute(final CallBackRequest callBackRequest) {
+    public void execute(final OkHttpClient client, final CallBackRequest callBackRequest) {
         // @todo: Add validations
         RequestBody body = RequestBody.create(JSON, callBackRequest.getBody().toString());
+
         Request request = new Request.Builder()
-                .url(callBackRequest.getUrl())
+                .url(getUrl(callBackRequest))
                 .post(body)
+                .headers( getHeaders(callBackRequest) )
                 .build();
+
         try (Response response = client.newCall(request).execute()) {
             final ResponseBody responseBody = response.body();
         } catch (IOException e) {

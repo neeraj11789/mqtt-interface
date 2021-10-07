@@ -6,7 +6,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -16,20 +15,20 @@ import java.io.IOException;
  * @package com.practo.instahms.pubsub.service
  * @date 08/10/21
  */
+
 @Service
 public class GetCallBackRequestHandlerService extends CallbackRequestHandlerBaseService<HttpMethod> {
-
-    @Autowired
-    private OkHttpClient client;
 
     public GetCallBackRequestHandlerService() {
         super( HttpMethod.GET );
     }
 
     @Override
-    public void execute(final CallBackRequest callBackRequest) {
+        public void execute(final OkHttpClient client, final CallBackRequest callBackRequest) {
+
         Request request = new Request.Builder()
-                .url(callBackRequest.getUrl())
+                .headers( getHeaders( callBackRequest ) )
+                .url(getUrl( callBackRequest ))
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
