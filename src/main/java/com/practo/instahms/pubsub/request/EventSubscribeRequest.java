@@ -14,7 +14,7 @@ import java.io.Serializable;
 // @todo: Create Generic Request Class that implements serializable
 public class EventSubscribeRequest implements Serializable {
 
-//    private CallBackRequest callBackRequest;
+    private CallBackRequest callback;
 
     private String event;
 }

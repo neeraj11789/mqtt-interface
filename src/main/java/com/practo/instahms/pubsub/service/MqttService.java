@@ -22,8 +22,8 @@ public class MqttService {
     @Qualifier("mqttSyncClient")
     private Mqtt5BlockingClient client;
 
-//    @Autowired
-//    private CallbackRequestHandler callbackHandler;
+    @Autowired
+    private CallbackRequestHandler callbackHandler;
 
     public void publish(final EventPublishRequest eventPublishRequest){
         client.publishWith()
@@ -40,13 +40,15 @@ public class MqttService {
                 .send();
 
         //set a callback that is called when a message is received (using the async API style)
+        // @todo: Use async client for subscription
         client.toAsync().publishes(SUBSCRIBED, publish -> {
             System.out.println("Received message: " + publish.getTopic() + " -> " + UTF_8.decode(publish.getPayload().get()));
 
-            // @todo: Handle it
-//            //disconnect the client after a message was received
-//            client.disconnect();
+            // @todo: Handle it - if client is disconnected connect again
+            // disconnect the client after a message was received
+            // client.disconnect();
         });
-//        callbackHandler.execute(eventSubscribeRequest.getCallBackRequest());
+
+        callbackHandler.execute(eventSubscribeRequest.getCallback());
     }
 }
