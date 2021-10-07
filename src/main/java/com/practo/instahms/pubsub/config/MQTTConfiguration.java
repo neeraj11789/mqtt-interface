@@ -23,7 +23,7 @@ public class MQTTConfiguration {
 
     @Bean
     @Qualifier("mqttSyncClient")
-    public MqttClient mqttBlockingClient(MqttSettings settings) {
+    public Mqtt5BlockingClient mqttBlockingClient(MqttSettings settings) {
 
         //create an MQTT client
         final Mqtt5BlockingClient client = MqttClient.builder()
@@ -46,7 +46,7 @@ public class MQTTConfiguration {
 
     @Bean
     @Qualifier("mqttAsyncClient")
-    public MqttClient mqttNonBlockingClient(MqttSettings settings) {
+    public Mqtt5AsyncClient mqttNonBlockingClient(MqttSettings settings) {
 
         //create an MQTT Async client
         final Mqtt5AsyncClient client = MqttClient.builder()

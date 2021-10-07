@@ -2,7 +2,9 @@ package com.practo.instahms.pubsub.resource;
 
 import com.practo.instahms.pubsub.domain.Client;
 import com.practo.instahms.pubsub.request.ClientRequest;
+import com.practo.instahms.pubsub.request.EventRequest;
 import com.practo.instahms.pubsub.service.ClientService;
+import com.practo.instahms.pubsub.service.MqttService;
 import com.practo.instahms.pubsub.util.ClientStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class ClientResource {
     @Autowired
     private ClientService service;
 
+    @Autowired
+    private MqttService mqttService;
+
     @GetMapping("/{clientId}")
     private ResponseEntity<Client> getClient(final @PathVariable String clientId){
         final Optional<Client> optionalClient = service.getClient( clientId );
@@ -44,5 +49,11 @@ public class ClientResource {
     private ResponseEntity<Client> updateClientStatus(final @PathVariable String clientId){
         service.disconnectClient(clientId);
         return ResponseEntity.status( HttpStatus.CREATED ).build();
+    }
+
+    @PostMapping("/{clientId}/publish")
+    private ResponseEntity<Object> publish(final @Valid @RequestBody EventRequest message){
+        mqttService.publish( message );
+        return ResponseEntity.status( HttpStatus.OK ).build();
     }
 }

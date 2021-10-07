@@ -34,3 +34,8 @@ The Use-case: LWT is a great way to notify other subscribed clients about the un
 - [Reference](https://www.hivemq.com/tags/mqtt-essentials/)
 - https://www.freecodecamp.org/news/best-practices-for-building-api-keys-97c26eabfea9/
 - https://www.hivemq.com/blog/mqtt-essentials-part-7-persistent-session-queuing-messages/
+
+### TODOs
+- [ ] generalize MQTT using Interface
+- [ ] client authentication using API keys
+- [ ] generalize the authentication methods
