@@ -1,25 +1,31 @@
-package com.practo.instahms.pubsub.service;
+package com.practo.instahms.pubsub.service.callback;
 
 import com.practo.instahms.pubsub.request.CallBackRequest;
+import com.practo.instahms.pubsub.util.HttpMethod;
 import okhttp3.*;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
  * @package com.practo.instahms.pubsub.service
- * @date 07/10/21
+ * @date 08/10/21
  */
-@Component
-public class CallbackRequestHandler {
+@Service
+public class PostCallBackRequestHandlerService extends CallbackRequestHandlerBaseService<HttpMethod> {
 
-    public static final MediaType JSON
-            = MediaType.get("application/json; charset=utf-8");
+    @Autowired
+    private OkHttpClient client;
 
-    public void execute(final CallBackRequest callBackRequest){
+    public PostCallBackRequestHandlerService() {
+        super( HttpMethod.POST );
+    }
+
+    @Override
+    public void execute(final CallBackRequest callBackRequest) {
         // @todo: Add validations
-        OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, callBackRequest.getBody().toString());
         Request request = new Request.Builder()
                 .url(callBackRequest.getUrl())

@@ -3,6 +3,7 @@ package com.practo.instahms.pubsub.service;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.practo.instahms.pubsub.request.EventPublishRequest;
 import com.practo.instahms.pubsub.request.EventSubscribeRequest;
+import com.practo.instahms.pubsub.service.callback.CallbackRequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
