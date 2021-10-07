@@ -2,14 +2,13 @@ package com.practo.instahms.pubsub.service;
 
 import com.practo.instahms.pubsub.domain.AuthToken;
 import com.practo.instahms.pubsub.domain.Client;
-import com.practo.instahms.pubsub.domain.repository.AuthTokenRepository;
-import com.practo.instahms.pubsub.domain.request.AuthTokenRequest;
-import com.practo.instahms.pubsub.domain.request.AuthTokenValidateRequest;
+import com.practo.instahms.pubsub.repository.AuthTokenRepository;
+import com.practo.instahms.pubsub.request.AuthTokenRequest;
+import com.practo.instahms.pubsub.request.AuthTokenValidateRequest;
 import com.practo.instahms.pubsub.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;

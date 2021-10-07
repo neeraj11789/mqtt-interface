@@ -1,4 +1,4 @@
-package com.practo.instahms.pubsub.domain.repository;
+package com.practo.instahms.pubsub.repository;
 
 import com.practo.instahms.pubsub.domain.Client;
 import org.springframework.data.jpa.repository.JpaRepository;

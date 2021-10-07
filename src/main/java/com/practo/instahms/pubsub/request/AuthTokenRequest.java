@@ -1,16 +1,15 @@
-package com.practo.instahms.pubsub.domain.request;
+package com.practo.instahms.pubsub.request;
 
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
- * @package com.practo.instahms.pubsub.domain.request
+ * @package com.practo.instahms.pubsub.request
  * @date 04/10/21
  */
 @Data

@@ -1,8 +1,8 @@
 package com.practo.instahms.pubsub.service;
 
 import com.practo.instahms.pubsub.domain.Client;
-import com.practo.instahms.pubsub.domain.repository.ClientRepository;
-import com.practo.instahms.pubsub.domain.request.ClientRequest;
+import com.practo.instahms.pubsub.repository.ClientRepository;
+import com.practo.instahms.pubsub.request.ClientRequest;
 import com.practo.instahms.pubsub.util.ClientStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

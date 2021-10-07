@@ -1,7 +1,7 @@
 package com.practo.instahms.pubsub.resource;
 
 import com.practo.instahms.pubsub.domain.Client;
-import com.practo.instahms.pubsub.domain.request.ClientRequest;
+import com.practo.instahms.pubsub.request.ClientRequest;
 import com.practo.instahms.pubsub.service.ClientService;
 import com.practo.instahms.pubsub.util.ClientStatus;
 import lombok.extern.slf4j.Slf4j;

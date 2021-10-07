@@ -1,8 +1,8 @@
 package com.practo.instahms.pubsub.resource;
 
 import com.practo.instahms.pubsub.domain.AuthToken;
-import com.practo.instahms.pubsub.domain.request.AuthTokenRequest;
-import com.practo.instahms.pubsub.domain.request.AuthTokenValidateRequest;
+import com.practo.instahms.pubsub.request.AuthTokenRequest;
+import com.practo.instahms.pubsub.request.AuthTokenValidateRequest;
 import com.practo.instahms.pubsub.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

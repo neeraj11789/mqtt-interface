@@ -1,4 +1,4 @@
-package com.practo.instahms.pubsub.domain.request;
+package com.practo.instahms.pubsub.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
- * @package com.practo.instahms.pubsub.domain.request
+ * @package com.practo.instahms.pubsub.request
  * @date 05/10/21
  */
 

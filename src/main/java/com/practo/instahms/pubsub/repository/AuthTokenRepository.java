@@ -1,8 +1,7 @@
-package com.practo.instahms.pubsub.domain.repository;
+package com.practo.instahms.pubsub.repository;
 
 
 import com.practo.instahms.pubsub.domain.AuthToken;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +14,7 @@ import java.util.Optional;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
- * @package com.practo.instahms.pubsub.domain.repository
+ * @package com.practo.instahms.pubsub.repository
  * @date 04/10/21
  */
 
