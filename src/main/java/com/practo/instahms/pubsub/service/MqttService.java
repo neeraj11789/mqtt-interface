@@ -1,11 +1,13 @@
 package com.practo.instahms.pubsub.service;
 
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
-import com.practo.instahms.pubsub.request.EventRequest;
+import com.practo.instahms.pubsub.request.EventPublishRequest;
+import com.practo.instahms.pubsub.request.EventSubscribeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import static com.hivemq.client.mqtt.MqttGlobalPublishFilter.SUBSCRIBED;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -20,10 +22,31 @@ public class MqttService {
     @Qualifier("mqttSyncClient")
     private Mqtt5BlockingClient client;
 
-    public void publish(final EventRequest eventRequest){
+//    @Autowired
+//    private CallbackRequestHandler callbackHandler;
+
+    public void publish(final EventPublishRequest eventPublishRequest){
         client.publishWith()
-                .topic(eventRequest.getEventName())
-                .payload( UTF_8.encode( eventRequest.getMessage().toPrettyString() )  )
+                .topic( eventPublishRequest.getEvent())
+                .payload( UTF_8.encode( eventPublishRequest.getMessage().toPrettyString() )  )
                 .send();
+    }
+
+    public void subscribe(final EventSubscribeRequest eventSubscribeRequest) {
+
+        //subscribe to the topic "my/test/topic"
+        client.subscribeWith()
+                .topicFilter(eventSubscribeRequest.getEvent())
+                .send();
+
+        //set a callback that is called when a message is received (using the async API style)
+        client.toAsync().publishes(SUBSCRIBED, publish -> {
+            System.out.println("Received message: " + publish.getTopic() + " -> " + UTF_8.decode(publish.getPayload().get()));
+
+            // @todo: Handle it
+//            //disconnect the client after a message was received
+//            client.disconnect();
+        });
+//        callbackHandler.execute(eventSubscribeRequest.getCallBackRequest());
     }
 }

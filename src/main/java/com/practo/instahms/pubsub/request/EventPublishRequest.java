@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  */
 @Setter
 @Getter
-public class EventRequest extends EventMetaData {
+public class EventPublishRequest extends EventMetaData {
 
     @NotNull
     private JsonNode message;

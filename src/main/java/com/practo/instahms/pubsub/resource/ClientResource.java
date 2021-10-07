@@ -2,7 +2,8 @@ package com.practo.instahms.pubsub.resource;
 
 import com.practo.instahms.pubsub.domain.Client;
 import com.practo.instahms.pubsub.request.ClientRequest;
-import com.practo.instahms.pubsub.request.EventRequest;
+import com.practo.instahms.pubsub.request.EventPublishRequest;
+import com.practo.instahms.pubsub.request.EventSubscribeRequest;
 import com.practo.instahms.pubsub.service.ClientService;
 import com.practo.instahms.pubsub.service.MqttService;
 import com.practo.instahms.pubsub.util.ClientStatus;
@@ -52,8 +53,16 @@ public class ClientResource {
     }
 
     @PostMapping("/{clientId}/publish")
-    private ResponseEntity<Object> publish(final @Valid @RequestBody EventRequest message){
-        mqttService.publish( message );
+    private ResponseEntity<Object> publish(final @PathVariable String clientId,
+                                           final @Valid @RequestBody EventPublishRequest event){
+        mqttService.publish( event );
+        return ResponseEntity.status( HttpStatus.OK ).build();
+    }
+
+    @PostMapping("/{clientId}/subscribe")
+    private ResponseEntity<Object> subscribe(final @PathVariable String clientId,
+                                             final @Valid @RequestBody EventSubscribeRequest event ){
+        mqttService.subscribe( event );
         return ResponseEntity.status( HttpStatus.OK ).build();
     }
 }

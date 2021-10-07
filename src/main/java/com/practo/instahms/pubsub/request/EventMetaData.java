@@ -18,7 +18,7 @@ import java.util.UUID;
 public class EventMetaData {
 
     @NotBlank
-    private String eventName;
+    private String event;
 
     private String eventId = UUID.randomUUID().toString();
 
