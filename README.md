@@ -41,3 +41,5 @@ The Use-case: LWT is a great way to notify other subscribed clients about the un
 - [ ] client authentication using API keys
 - [ ] generalize the authentication methods
 - [ ] integrate broker status
+- [ ] add logging to all places
+- [ ] log the requests and subscription details for clients

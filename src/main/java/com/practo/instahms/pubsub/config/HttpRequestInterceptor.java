@@ -13,7 +13,7 @@ import java.io.IOException;
  * @date 08/10/21
  */
 @AllArgsConstructor
-public class DefaultContentTypeInterceptor implements Interceptor {
+public class HttpRequestInterceptor implements Interceptor {
 
     private String contentType;
 

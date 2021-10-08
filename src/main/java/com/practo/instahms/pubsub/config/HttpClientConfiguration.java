@@ -24,7 +24,7 @@ public class HttpClientConfiguration {
         // @todo: can have this extracted in core class - and expose method of those classes
         return new OkHttpClient.Builder()
                 .addInterceptor(
-                        new DefaultContentTypeInterceptor("application/json"))
+                        new HttpRequestInterceptor("application/json"))
                 .readTimeout(requestTimeOut, TimeUnit.MILLISECONDS)
                 .build();
     }
