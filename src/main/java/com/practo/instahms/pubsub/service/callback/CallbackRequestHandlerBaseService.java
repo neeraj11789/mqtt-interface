@@ -7,8 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
@@ -35,17 +38,24 @@ public abstract class CallbackRequestHandlerBaseService<T extends HttpMethod> {
 
     protected String getUrl(final CallBackRequest callBackRequest) {
         String callBackRequestUrl = callBackRequest.getUrl();
-        for (Map.Entry<String, Object> k : callBackRequest.getPathVariables().entrySet()) {
-            callBackRequestUrl = callBackRequestUrl.replace( PATH_VARIABLE_PREFIX + k.getKey()
-                    + PATH_VARIABLE_SUFFIX, (CharSequence) k.getValue() );
+        if(Objects.nonNull( callBackRequest.getPathVariables() )){
+            for (Map.Entry<String, Object> k : callBackRequest.getPathVariables().entrySet()) {
+                callBackRequestUrl = callBackRequestUrl.replace( PATH_VARIABLE_PREFIX + k.getKey()
+                        + PATH_VARIABLE_SUFFIX, (CharSequence) k.getValue() );
+            }
         }
         return callBackRequestUrl;
     }
 
-    protected Headers getHeaders(final CallBackRequest callBackRequest) {
-        final Headers.Builder headerBuilder = new Headers.Builder();
-        callBackRequest.getHeaders().forEach( headerBuilder::add );
-        final Headers headers = headerBuilder.build();
-        return headers;
+    protected Optional<Headers> getHeaders(final CallBackRequest callBackRequest) {
+        final boolean hasHeaders = Objects.nonNull(callBackRequest.getHeaders());
+        if (hasHeaders) {
+            final Headers.Builder headerBuilder = new Headers.Builder();
+            callBackRequest.getHeaders().entrySet().stream().filter( k -> !StringUtils.isEmpty( k.getKey() )
+                    && !StringUtils.isEmpty( k.getValue() ) ).forEach( k -> headerBuilder.add( k.getKey(), k.getValue() ) );
+            final Headers headers = headerBuilder.build();
+            return Optional.of( headers );
+        }
+        return Optional.empty();
     }
 }

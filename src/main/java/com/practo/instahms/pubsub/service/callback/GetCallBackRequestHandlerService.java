@@ -26,10 +26,9 @@ public class GetCallBackRequestHandlerService extends CallbackRequestHandlerBase
     @Override
         public void execute(final OkHttpClient client, final CallBackRequest callBackRequest) {
 
-        Request request = new Request.Builder()
-                .headers( getHeaders( callBackRequest ) )
-                .url(getUrl( callBackRequest ))
-                .build();
+        final Request.Builder requestBuilder = new Request.Builder();
+        getHeaders( callBackRequest ).ifPresent( requestBuilder::headers );
+        final Request request = requestBuilder.url( getUrl( callBackRequest ) ).build();
 
         try (Response response = client.newCall(request).execute()) {
             final ResponseBody responseBody = response.body();

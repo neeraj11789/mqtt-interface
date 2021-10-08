@@ -24,11 +24,9 @@ public class PostCallBackRequestHandlerService extends CallbackRequestHandlerBas
         // @todo: Add validations
         RequestBody body = RequestBody.create(JSON, callBackRequest.getBody().toString());
 
-        Request request = new Request.Builder()
-                .url(getUrl(callBackRequest))
-                .post(body)
-                .headers( getHeaders(callBackRequest) )
-                .build();
+        final Request.Builder requestBuilder = new Request.Builder();
+        getHeaders( callBackRequest ).ifPresent( requestBuilder::headers );
+        final Request request = requestBuilder.url( getUrl( callBackRequest ) ).post(body).build();
 
         try (Response response = client.newCall(request).execute()) {
             final ResponseBody responseBody = response.body();
