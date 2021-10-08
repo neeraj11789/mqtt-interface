@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Base64;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,9 +26,6 @@ public class AuthService {
     @Autowired
     AuthTokenRepository repository;
 
-    @Autowired
-    ClientService service;
-
     public AuthToken registerNewKey(final AuthTokenRequest request) {
         final AuthToken token = createNewToken(request);
         repository.save( token );
@@ -44,7 +39,9 @@ public class AuthService {
             throw new RuntimeException("key_already_present");
         }
         token.setPrefix( Utils.generateTokenPrefix() );
-        token.setToken( Base64.getEncoder().encodeToString( Utils.generateToken().getBytes() ) );
+        // @todo: Show normal token while creation only and save the encoded token
+//        token.setToken( Base64.getEncoder().encodeToString( Utils.generateToken().getBytes() ) );
+        token.setToken( Utils.generateToken() );
         return token;
     }
 
@@ -53,25 +50,16 @@ public class AuthService {
         // throws exception is user does not exist etc
     }
 
-    public Optional<List<AuthToken>> search(final String userId, final String externalId, final String prefix, final String name) {
-        // @todo: Need to check this one
-        throw new RuntimeException("method_not_implemented");
-    }
-
     public AuthTokenResponse getToken(@NotBlank String userId, final String externalId) {
         validateUser( userId );
-        final Optional<AuthToken> optionalAuthToken = repository.findByExternalIdEquals( externalId );
-        final AuthTokenResponse token = optionalAuthToken.map( (at) -> AuthTokenResponseMapper.INSTANCE.authTokenToResponse( at ) ).orElseThrow( () -> new RuntimeException( "token_not_found" ) );
-        return token;
-    }
-
-    public Optional<AuthToken> getToken(final Long id) {
-        return repository.findById( id );
+        final Optional<AuthToken> optionalAuthToken = repository.findByNameEqualsAndUserIdEquals( externalId, userId );
+        return optionalAuthToken.map( (at) -> AuthTokenResponseMapper.INSTANCE.authTokenToResponse( at ) ).orElseThrow( () -> new RuntimeException( "token_not_found" ) );
     }
 
     public Boolean validateToken(final AuthTokenValidateRequest request) {
-        final String encodedString = request.getToken();
-        final Optional<AuthToken> byValueEquals = repository.findByTokenEquals( encodedString );
+        validateUser( request.getUserId() );
+        final String encodedToken = request.getToken(); // @todo: Use base64 encoded token - save encoded token and compare
+        final Optional<AuthToken> byValueEquals = repository.findByTokenEquals( encodedToken );
         return byValueEquals.map( v -> v.getPrefix().equals( request.getPrefix() ) ).orElse( false );
     }
 }

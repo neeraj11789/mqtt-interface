@@ -25,4 +25,6 @@ public class AuthTokenValidateRequest implements Serializable {
 
     @NotBlank
     private String token;
+    
+    private String userId;
 }

@@ -46,3 +46,4 @@ The Use-case: LWT is a great way to notify other subscribed clients about the un
 - [ ] use LWT for knowing the latest connection status for client
 - [ ] use persistent and clean session for different use-cases
 - [ ] swagger integration
+- [ ] move token generation part to the user-service

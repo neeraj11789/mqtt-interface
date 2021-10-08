@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -41,24 +40,17 @@ public class AuthResource {
         return ResponseEntity.status( HttpStatus.CREATED ).body(token);
     }
 
-    @GetMapping("/search")
-    private ResponseEntity<List<AuthToken>> searchToken(final @NotBlank @PathVariable String userId,
-                                                        final @RequestParam(value = "external_id", required = false) String externalId,
-                                                        final @RequestParam(required = false) String name,
-                                                        final @RequestParam(required = false) String prefix){
-        final Optional<List<AuthToken>> optionalAuthTokens = service.search( userId, externalId, prefix, name );
-        return optionalAuthTokens.map( authTokens -> ResponseEntity.ok().body( authTokens ) ).orElseGet( () -> ResponseEntity.notFound().build() );
-    }
-
-    @GetMapping("/{externalId}")
+    @GetMapping("/{keyName}")
     private ResponseEntity<AuthTokenResponse> getToken(final @NotBlank @PathVariable String userId,
-                                               final @PathVariable String externalId){
-        final AuthTokenResponse token = service.getToken( userId, externalId );
+                                               final @PathVariable String keyName){
+        final AuthTokenResponse token = service.getToken( userId, keyName );
         return ResponseEntity.ok().body( token );
     }
 
     @PostMapping("/validate")
-    private ResponseEntity<Object> validate(final @Valid @RequestBody AuthTokenValidateRequest request){
+    private ResponseEntity<Object> validate(final @NotBlank @PathVariable String userId,
+                                            final @Valid @RequestBody AuthTokenValidateRequest request){
+        request.setUserId( userId );
         final Boolean isValidToken = service.validateToken( request );
         return Optional.of( isValidToken ).filter( v -> v.equals( true ) ).map( v -> ResponseEntity.noContent().build() ).orElseGet( () -> ResponseEntity.badRequest().build() );
     }
