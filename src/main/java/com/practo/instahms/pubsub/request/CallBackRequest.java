@@ -36,4 +36,6 @@ public class CallBackRequest {
     private Map<String, String> headers;
 
     private Map<String, Object> pathVariables;
+
+    private Map<String, String> queryParams;
 }

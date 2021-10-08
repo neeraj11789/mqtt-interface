@@ -21,6 +21,7 @@ public class HttpClientConfiguration {
 
     @Bean
     public OkHttpClient okHttpClient(){
+        // @todo: can have this extracted in core class - and expose method of those classes
         return new OkHttpClient.Builder()
                 .addInterceptor(
                         new DefaultContentTypeInterceptor("application/json"))
