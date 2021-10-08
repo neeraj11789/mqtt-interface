@@ -1,7 +1,9 @@
 package com.practo.instahms.pubsub.request;
 
 import com.practo.instahms.pubsub.util.ClientStatus;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +15,9 @@ import java.io.Serializable;
  * @date 05/10/21
  */
 
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
 public class ClientRequest implements Serializable {
 
     @NotBlank

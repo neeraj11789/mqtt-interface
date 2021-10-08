@@ -21,6 +21,7 @@ import java.util.Optional;
  * @package com.practo.instahms.pubsub.resource
  * @date 05/10/21
  */
+
 @RestController
 @RequestMapping("/v1/clients")
 @Slf4j
@@ -32,17 +33,22 @@ public class ClientResource {
     @Autowired
     private MqttService mqttService;
 
+    @PostMapping()
+    private ResponseEntity<Client> newClient(final @Valid @RequestBody ClientRequest request){
+        request.setStatus( ClientStatus.offline ); // register new client with offline status
+        service.createClient(request);
+        return ResponseEntity.status( HttpStatus.CREATED ).build();
+    }
+
     @GetMapping("/{clientId}")
     private ResponseEntity<Client> getClient(final @PathVariable String clientId){
         final Optional<Client> optionalClient = service.getClient( clientId );
         return optionalClient.map( c -> ResponseEntity.ok().body( c ) ).orElseGet( () -> ResponseEntity.notFound().build() );
     }
 
-    @PostMapping("/{clientId}/connect")
-    private ResponseEntity<Client> connect(final @PathVariable String clientId, final @Valid @RequestBody ClientRequest request){
-        request.setClientId( clientId ); // update the clientId - uri resource takes preference
-        request.setStatus( ClientStatus.online ); // update status for connect
-        service.connectClient(request);
+    @PutMapping("/{clientId}/connect")
+    private ResponseEntity<Client> connect(final @PathVariable String clientId){
+        service.connectClient(clientId);
         return ResponseEntity.status( HttpStatus.CREATED ).build();
     }
 

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -24,16 +25,22 @@ import static com.practo.instahms.pubsub.util.Constants.DEFAULT_USER;
 @MappedSuperclass
 public class BaseDomain implements Serializable {
 
+    @Column(nullable = false)
     private Timestamp createdAt = Timestamp.valueOf( LocalDateTime.now() );
 
+    @Column(nullable = false)
     private Timestamp updatedAt = Timestamp.valueOf( LocalDateTime.now() );
 
+    @Column(nullable = false)
     private String externalId = UUID.randomUUID().toString();
 
+    @Column(nullable = false)
     private String createdBy = DEFAULT_USER;
 
+    @Column(nullable = false)
     private String updatedBy = DEFAULT_USER;
 
+    @Column(nullable = false, columnDefinition = "tinyint default 1")
     @Range(max = 1)
     private int isActive = 1;
 }

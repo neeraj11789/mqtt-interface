@@ -3,6 +3,7 @@ package com.practo.instahms.pubsub.resource;
 import com.practo.instahms.pubsub.domain.AuthToken;
 import com.practo.instahms.pubsub.request.AuthTokenRequest;
 import com.practo.instahms.pubsub.request.AuthTokenValidateRequest;
+import com.practo.instahms.pubsub.response.AuthTokenResponse;
 import com.practo.instahms.pubsub.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,7 +24,7 @@ import java.util.Optional;
  */
 
 @RestController
-@RequestMapping("/v1/auth-token")
+@RequestMapping("/v1/users/{userId}/auth-token")
 @Slf4j
 public class AuthResource {
 
@@ -30,7 +32,8 @@ public class AuthResource {
     private AuthService service;
 
     @PostMapping()
-    private ResponseEntity<AuthToken> register(final @Valid @RequestBody AuthTokenRequest request){
+    private ResponseEntity<AuthToken> register(final @NotBlank @PathVariable String userId, final @Valid @RequestBody AuthTokenRequest request){
+        request.setUserId( userId );
         final AuthToken token = service.registerNewKey( request );
         if (Objects.isNull(token)) {
             return ResponseEntity.internalServerError().build();
@@ -39,26 +42,19 @@ public class AuthResource {
     }
 
     @GetMapping("/search")
-    private ResponseEntity<List<AuthToken>> searchToken(final @RequestParam(value = "external_id", required = false) String externalId,
+    private ResponseEntity<List<AuthToken>> searchToken(final @NotBlank @PathVariable String userId,
+                                                        final @RequestParam(value = "external_id", required = false) String externalId,
                                                         final @RequestParam(required = false) String name,
                                                         final @RequestParam(required = false) String prefix){
-
-        final Optional<List<AuthToken>> optionalAuthTokens = service.search( externalId, prefix, name );
+        final Optional<List<AuthToken>> optionalAuthTokens = service.search( userId, externalId, prefix, name );
         return optionalAuthTokens.map( authTokens -> ResponseEntity.ok().body( authTokens ) ).orElseGet( () -> ResponseEntity.notFound().build() );
     }
 
     @GetMapping("/{externalId}")
-    private ResponseEntity<AuthToken> getToken(final @PathVariable String externalId){
-
-        final Optional<AuthToken> optionalAuthToken = service.getToken( externalId);
-        return optionalAuthToken.map( authToken -> ResponseEntity.ok().body( authToken ) ).orElseGet( () -> ResponseEntity.notFound().build() );
-    }
-
-    @GetMapping("/internal/{id}")
-    private ResponseEntity<AuthToken> getTokenByInternalId(final @PathVariable Long id){
-
-        final Optional<AuthToken> optionalAuthToken = service.getToken( id);
-        return optionalAuthToken.map( authToken -> ResponseEntity.ok().body( authToken ) ).orElseGet( () -> ResponseEntity.notFound().build() );
+    private ResponseEntity<AuthTokenResponse> getToken(final @NotBlank @PathVariable String userId,
+                                               final @PathVariable String externalId){
+        final AuthTokenResponse token = service.getToken( userId, externalId );
+        return ResponseEntity.ok().body( token );
     }
 
     @PostMapping("/validate")

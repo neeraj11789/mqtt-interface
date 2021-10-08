@@ -26,4 +26,15 @@ public class Utils {
         boolean useNumbers = true;
         return generateRandomString(length, useLetters, useNumbers);
     }
+
+    public static String mask(final String st, int len, char maskChar){
+        if(len <= 0) return st;
+        len = Math.min( len, st.length() );
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            sb.append( maskChar );
+        }
+        sb.append( st.substring( len ) );
+        return sb.toString();
+    }
 }

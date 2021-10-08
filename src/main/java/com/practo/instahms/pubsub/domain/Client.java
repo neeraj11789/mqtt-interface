@@ -21,19 +21,22 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Table(name = "client")
 @Where(clause = "is_active = 1")
-public class Client extends BaseDomain{
+public class Client extends BaseDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(nullable = false, columnDefinition = "varchar(255)")
     @NotBlank
     private String userId;
 
+    @Column(unique = true, nullable = false, columnDefinition = "varchar(255)")
     @NotBlank
     private String clientId;
 
+    @Column(nullable = false, columnDefinition = "varchar(32) default offline")
     @Enumerated(EnumType.STRING)
     private ClientStatus status;
 

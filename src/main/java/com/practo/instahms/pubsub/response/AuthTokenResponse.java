@@ -1,4 +1,4 @@
-package com.practo.instahms.pubsub.request;
+package com.practo.instahms.pubsub.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -6,15 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
- * @package com.practo.instahms.pubsub.request
- * @date 04/10/21
+ * @package com.practo.instahms.pubsub.response
+ * @date 08/10/21
  */
 
 @Getter
@@ -22,13 +19,19 @@ import java.util.List;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AuthTokenRequest implements Serializable {
+public class AuthTokenResponse implements Serializable {
 
-    @NotBlank
+    private String externalId;
+
     private String name;
+
+    private String prefix;
+
+    private String token;
+
+    private String scopes;
 
     private String userId;
 
-    @NotEmpty
-    private List<String> scopes;
+    private int isActive;
 }

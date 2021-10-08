@@ -18,7 +18,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "api_keys")
+@Table(name = "auth_token")
 @Where(clause = "is_active = 1")
 public class AuthToken extends BaseDomain{
     @Id
@@ -26,16 +26,24 @@ public class AuthToken extends BaseDomain{
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(columnDefinition = "varchar(255)", nullable = false, unique = true)
     private String name;
 
+    @Column(columnDefinition = "varchar(255)", nullable = false, unique = true)
     private String prefix;
 
-    private String value;
+    @Column(columnDefinition = "varchar(255)", nullable = false)
+    private String token;
 
+    @Column(columnDefinition = "varchar(255)", nullable = false)
     private String scopes;
 
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
+    // @todo: Move this flow to the User Auth API
+    // @todo: From here we would be calling those apis for authentication
+//    @ManyToOne
+//    @JoinColumn(name = "client_id")
+//    private Client client;
 
+    @Column(columnDefinition = "varchar(255)", nullable = false)
+    private String userId;
 }

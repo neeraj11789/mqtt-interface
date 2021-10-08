@@ -45,3 +45,4 @@ The Use-case: LWT is a great way to notify other subscribed clients about the un
 - [ ] log the requests and subscription details for clients
 - [ ] use LWT for knowing the latest connection status for client
 - [ ] use persistent and clean session for different use-cases
+- [ ] swagger integration

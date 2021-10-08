@@ -32,5 +32,8 @@ public interface AuthTokenRepository extends JpaRepository<AuthToken, Long> {
 
     Optional<AuthToken> findByExternalIdEquals(@NonNull String externalId);
 
-    Optional<AuthToken> findByValueEquals(@NonNull String value);
+    Optional<AuthToken> findByTokenEquals(@NonNull String value);
+
+    Optional<AuthToken> findByNameEqualsAndUserIdEquals(@NonNull String name, @Nullable String userId);
+
 }
