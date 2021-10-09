@@ -1,5 +1,6 @@
 package com.practo.instahms.pubsub.request;
 
+import com.practo.instahms.pubsub.util.EventTopic;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,8 +18,7 @@ import java.util.UUID;
 @Getter
 public class EventMetaData {
 
-    @NotBlank
-    private String event;
+    private EventTopic event;
 
     private String eventId = UUID.randomUUID().toString();
 

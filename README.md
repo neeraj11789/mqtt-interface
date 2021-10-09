@@ -46,6 +46,9 @@ The Use-case: LWT is a great way to notify other subscribed clients about the un
 - [ ] use LWT for knowing the latest connection status for client
 - [ ] use persistent and clean session for different use-cases
 - [ ] swagger integration
+- [ ] retain flag, QOS etc configurations
 - [ ] move token generation part to the user-service
-    - javadevjournal.com/spring/securing-a-restful-web-service-with-spring-security/
-    - https://www.freecodecamp.org/news/how-to-setup-jwt-authorization-and-authentication-in-spring/
+- [ ] javadevjournal.com/spring/securing-a-restful-web-service-with-spring-security/
+- [ ] https://www.freecodecamp.org/news/how-to-setup-jwt-authorization-and-authentication-in-spring/
+- [ ] spring security for the authentication for services
+- [ ] explore MQTT-5 features - https://www.hivemq.com/tags/mqtt-5-essentials/

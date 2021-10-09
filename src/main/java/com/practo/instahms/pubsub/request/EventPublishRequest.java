@@ -1,8 +1,11 @@
 package com.practo.instahms.pubsub.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
@@ -13,9 +16,14 @@ import javax.validation.constraints.NotNull;
  */
 @Setter
 @Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@ToString(callSuper = true)
 public class EventPublishRequest extends EventMetaData {
 
     @NotNull
-    private JsonNode message;
+    private JsonNode payload;
+
+    private Options options;
 
 }

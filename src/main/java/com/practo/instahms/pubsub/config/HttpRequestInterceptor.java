@@ -12,6 +12,7 @@ import java.io.IOException;
  * @package com.practo.instahms.pubsub.config
  * @date 08/10/21
  */
+
 @AllArgsConstructor
 public class HttpRequestInterceptor implements Interceptor {
 

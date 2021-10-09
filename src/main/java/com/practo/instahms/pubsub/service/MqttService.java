@@ -4,6 +4,9 @@ import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.practo.instahms.pubsub.request.EventPublishRequest;
 import com.practo.instahms.pubsub.request.EventSubscribeRequest;
 import com.practo.instahms.pubsub.service.callback.CallbackRequestHandler;
+import com.practo.instahms.pubsub.util.EventTopic;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @package com.practo.instahms.pubsub.service
  * @date 07/10/21
  */
+
+@Slf4j
 @Service
 public class MqttService {
 
@@ -26,11 +31,18 @@ public class MqttService {
     @Autowired
     private CallbackRequestHandler callbackHandler;
 
-    public void publish(final EventPublishRequest eventPublishRequest){
+    public void publish(final EventPublishRequest request){
+        if(!EnumUtils.isValidEnum( EventTopic.class, request.getEvent().name() )){
+            throw new RuntimeException("event_not_supported");
+        }
+
         client.publishWith()
-                .topic( eventPublishRequest.getEvent())
-                .payload( UTF_8.encode( eventPublishRequest.getMessage().toPrettyString() )  )
+                .topic( request.getEvent().getTopic())
+                .payload( UTF_8.encode( request.getPayload().toPrettyString() )  )
+                .retain( request.getOptions().isRetainFlag() )
+                .qos( request.getOptions().getQos().getQosVal() )
                 .send();
+        log.info( "Published event {} on topic {}. Request {}", request.getEvent(), request.getEvent().getTopic(), request );
     }
 
     public void subscribe(final EventSubscribeRequest eventSubscribeRequest) {
