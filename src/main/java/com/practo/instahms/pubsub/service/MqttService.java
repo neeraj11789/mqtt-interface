@@ -1,12 +1,13 @@
 package com.practo.instahms.pubsub.service;
 
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
+import com.practo.instahms.pubsub.config.EventTopicConfiguration;
+import com.practo.instahms.pubsub.exception.UnSupportedEventException;
 import com.practo.instahms.pubsub.request.EventPublishRequest;
 import com.practo.instahms.pubsub.request.EventSubscribeRequest;
 import com.practo.instahms.pubsub.service.callback.CallbackRequestHandler;
-import com.practo.instahms.pubsub.util.EventTopic;
+import com.practo.instahms.pubsub.util.ExceptionHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -31,18 +32,22 @@ public class MqttService {
     @Autowired
     private CallbackRequestHandler callbackHandler;
 
+    @Autowired
+    private EventTopicConfiguration topicConfiguration;
+
     public void publish(final EventPublishRequest request){
-        if(!EnumUtils.isValidEnum( EventTopic.class, request.getEvent().name() )){
-            throw new RuntimeException("event_not_supported");
+//        if(!EnumUtils.isValidEnum( EventTopic.class, request.getEvent().name() )){
+        if(!topicConfiguration.getPracto_event().containsKey( request.getEvent() )){
+            throw new UnSupportedEventException( ExceptionHelper.EVENT_NOT_SUPPORTED.getCode(), ExceptionHelper.EVENT_NOT_SUPPORTED.getMessage() );
         }
 
         client.publishWith()
-                .topic( request.getEvent().getTopic())
+                .topic( request.getEvent())
                 .payload( UTF_8.encode( request.getPayload().toPrettyString() )  )
                 .retain( request.getOptions().isRetainFlag() )
                 .qos( request.getOptions().getQos().getQosVal() )
                 .send();
-        log.info( "Published event {} on topic {}. Request {}", request.getEvent(), request.getEvent().getTopic(), request );
+        log.info( "Published event {} on topic {}. Request {}", request.getEvent(), topicConfiguration.getPracto_event().get( request.getEvent() ), request );
     }
 
     public void subscribe(final EventSubscribeRequest eventSubscribeRequest) {
