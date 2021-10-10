@@ -61,6 +61,7 @@ public class ClientResource {
     @PostMapping("/{clientId}/publish")
     private ResponseEntity<Object> publish(final @PathVariable String clientId,
                                            final @Valid @RequestBody EventPublishRequest event){
+        event.setClient( clientId );
         mqttService.publish( event );
         return ResponseEntity.status( HttpStatus.OK ).build();
     }

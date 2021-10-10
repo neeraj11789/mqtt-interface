@@ -52,3 +52,4 @@ The Use-case: LWT is a great way to notify other subscribed clients about the un
 - [ ] https://www.freecodecamp.org/news/how-to-setup-jwt-authorization-and-authentication-in-spring/
 - [ ] spring security for the authentication for services
 - [ ] explore MQTT-5 features - https://www.hivemq.com/tags/mqtt-5-essentials/
+- [ ] explore the Plugins for Hive - Majorly webhook for events for production purpose

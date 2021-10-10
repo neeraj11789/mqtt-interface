@@ -12,7 +12,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ExceptionHelper {
 
-    EVENT_NOT_SUPPORTED(4001 , "Event is not supported by the system currently");
+    // @Note: Series 4001 - 4099 for events, 4100 - 4199 for client
+    EVENT_NOT_SUPPORTED(4001 , "Event is not supported by the system currently"),
+    CLIENT_NOT_FOUND(4104 , "Client Not Found");
 
     final private int code;
 

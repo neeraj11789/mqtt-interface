@@ -7,7 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
@@ -18,8 +22,16 @@ import javax.validation.constraints.NotNull;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ToString(callSuper = true)
-public class EventPublishRequest extends EventMetaData {
+@ToString
+public class EventPublishRequest implements Serializable {
+
+    @NotBlank
+    private String event;
+
+    // @todo: Pass from request and make non-null
+    private Timestamp eventTimestamp = Timestamp.valueOf( LocalDateTime.now());
+
+    private String client;
 
     @NotNull
     private JsonNode payload;

@@ -1,11 +1,8 @@
 package com.practo.instahms.pubsub.repository;
 
-import com.practo.instahms.pubsub.domain.Client;
+import com.practo.instahms.pubsub.domain.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
@@ -14,8 +11,6 @@ import java.util.Optional;
  */
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
-
-    Optional<Client> findByClientIdEquals(final @NonNull String clientId);
+public interface EventRepository extends JpaRepository<Event, Long> {
 
 }

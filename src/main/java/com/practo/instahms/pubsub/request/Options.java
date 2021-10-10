@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(callSuper = true)
+@ToString
 public class Options {
 
     @Valid

@@ -37,6 +37,9 @@ public class MqttService {
     @Autowired
     private EventTopicConfiguration topicConfiguration;
 
+    @Autowired
+    private EventService eventService;
+
     public void publish(final EventPublishRequest request){
         if(!topicConfiguration.getPractoEvent().containsKey( request.getEvent() )){
             throw new UnSupportedEventException( ExceptionHelper.EVENT_NOT_SUPPORTED.getCode(), ExceptionHelper.EVENT_NOT_SUPPORTED.getMessage() );
@@ -49,7 +52,10 @@ public class MqttService {
                 .retain( request.getOptions().isRetainFlag() )
                 .qos( request.getOptions().getQos().getQosVal() )
                 .send();
-        log.info( "PUBLISHED_EVENT {} on topic {}. Request {}", request.getEvent(), topic, request );
+
+        // Save event for reference
+        eventService.persist(request);
+        log.info( "PUBLISHED_EVENT: {} on topic: {}. Request: {}", request.getEvent(), topic, request );
     }
 
     public void subscribe(final EventSubscribeRequest eventSubscribeRequest) {
@@ -60,13 +66,17 @@ public class MqttService {
                 .send();
     }
 
+    /**
+     * Register the listener for subscribed topics
+     */
     @PostConstruct
     public void messageListener(){
         //set a callback that is called when a message is received (using the async API style)
         client.toAsync().publishes(SUBSCRIBED, publish -> {
-            System.out.println(" RECEIVED_EVENT : " + publish.getTopic() + " -> " + UTF_8.decode(publish.getPayload().get()));
+            final String topic = publish.getTopic().toString();
+            final String event = topicConfiguration.getPractoEvent().inverse().get( topic );
+            log.info(" RECEIVED_EVENT: {} On Topic: {} Qos: {} Retain: {} with Payload: {}" , event, topic, publish.getQos(), publish.isRetain(), UTF_8.decode(publish.getPayload().get()));
 //            callbackHandler.execute(eventSubscribeRequest.getCallback());
-            System.out.println(topicConfiguration.getPractoEvent().inverse().get( publish.getTopic().toString() ));
         });
     }
 }
