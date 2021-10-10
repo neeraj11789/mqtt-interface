@@ -1,10 +1,9 @@
 package com.practo.instahms.pubsub.config;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Defines the list of events and supported
@@ -22,5 +21,5 @@ public class EventTopicConfiguration {
     /**
      * For now we are keeping 1:1 mapping can be changed later
      */
-    private final Map<String, String> practo_event = new HashMap<>();
+    private final BiMap<String, String> practoEvent = HashBiMap.create();
 }

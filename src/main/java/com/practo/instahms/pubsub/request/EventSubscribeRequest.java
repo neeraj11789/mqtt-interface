@@ -16,5 +16,7 @@ public class EventSubscribeRequest implements Serializable {
 
     private CallBackRequest callback;
 
+    private Options options = new Options();
+
     private String event;
 }
