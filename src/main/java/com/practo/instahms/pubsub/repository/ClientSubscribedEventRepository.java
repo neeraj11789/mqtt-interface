@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,8 +18,7 @@ import java.util.Optional;
 
 @Repository
 public interface ClientSubscribedEventRepository extends JpaRepository<ClientSubscribedEvent, Long> {
-
-    Optional<ClientSubscribedEvent> findByEventEquals(@NonNull Event event);
+    List<ClientSubscribedEvent> findByEventEquals(@NonNull Event event);
 
     Optional<ClientSubscribedEvent> findByEventEqualsAndClientEquals(@NonNull Event event, @NonNull Client client);
 

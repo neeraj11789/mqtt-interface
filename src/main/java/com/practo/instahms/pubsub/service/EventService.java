@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -70,8 +72,13 @@ public class EventService {
         subscribedEventRepository.save( clientSubscribedEvent );
     }
 
-    public Optional<ClientSubscribedEvent> getSubscribersForEvent(final String eventName) {
+    // @todo: This should return list of the subscribers
+    public List<ClientSubscribedEvent> getSubscribersForEvent(final String eventName) {
+        List<ClientSubscribedEvent> subscribedEvents = new ArrayList<>();
         final Optional<Event> event = repository.findByEventEquals( eventName );
-        return event.flatMap( e -> subscribedEventRepository.findByEventEquals( e ) );
+        if(event.isPresent()){
+            subscribedEvents = subscribedEventRepository.findByEventEquals( event.get() );
+        }
+        return subscribedEvents;
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.practo.instahms.pubsub.config.EventTopicConfiguration;
+import com.practo.instahms.pubsub.domain.ClientSubscribedEvent;
 import com.practo.instahms.pubsub.exception.UnSupportedEventException;
 import com.practo.instahms.pubsub.request.CallBackRequest;
 import com.practo.instahms.pubsub.request.EventPublishRequest;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+
+import java.util.List;
 
 import static com.hivemq.client.mqtt.MqttGlobalPublishFilter.SUBSCRIBED;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -83,15 +86,15 @@ public class MqttService {
             final String topic = publish.getTopic().toString();
             final String event = topicConfiguration.getPractoEvent().inverse().get( topic );
             log.info(" RECEIVED_EVENT: {} On Topic: {} Qos: {} Retain: {} with Payload: {}" , event, topic, publish.getQos(), publish.isRetain(), UTF_8.decode(publish.getPayload().get()));
-//            callbackHandler.execute(eventSubscribeRequest.getCallback());
-                eventService.getSubscribersForEvent(event).ifPresent( se -> {
-                    log.info( "Executing Callback for Client:{} with Payload:{}", se.getClient(), se.getCallback() );
-                    try {
-                        callbackHandler.execute( mapper.readValue( se.getCallback(), CallBackRequest.class ) );
-                    } catch (JsonProcessingException e) {
-                        log.error( "unable to serialize" );
-                    }
-                } );
+            final List<ClientSubscribedEvent> subscribersForEvent = eventService.getSubscribersForEvent( event );
+            subscribersForEvent.forEach( se -> {
+                log.info( " EXECUTING_CALLBACK Client:{} Event:{} Payload:{}", se.getClient().getClientId(), se, se.getCallback() );
+                try {
+                    callbackHandler.execute( mapper.readValue( se.getCallback(), CallBackRequest.class ) );
+                } catch (JsonProcessingException e) {
+                    log.error( "unable to serialize" );
+                }
+            } );
         });
     }
 }
