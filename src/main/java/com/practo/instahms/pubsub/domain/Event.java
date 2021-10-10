@@ -4,7 +4,6 @@ import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Table(name = "event")
@@ -24,18 +23,9 @@ public class Event extends BaseDomain {
     @Column(unique = true, nullable = false, columnDefinition = "varchar(255)")
     private String event;
 
-    @NonNull
-    @Column(nullable = true)
-    private Timestamp eventTimestamp ;
-
     // @Note: Added topic for reference as for older records someone can change mapping
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String topic;
-
-    @Column(nullable = true)
-    private String payload;
-
-    private String requestedIP = "127.0.0.1"; // @todo: Check later and populate
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "client_subscribed_event",
@@ -43,9 +33,8 @@ public class Event extends BaseDomain {
             inverseJoinColumns = @JoinColumn(name = "client_id"))
     private List<Client> subscriberClients;
 
-    @NonNull
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "publisher_client_id", nullable = false)
-    private Client publisherClient;
+//    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+//    @JoinColumn(name = "publisher_client_id", nullable = false)
+//    private Client publisherClient;
 
 }

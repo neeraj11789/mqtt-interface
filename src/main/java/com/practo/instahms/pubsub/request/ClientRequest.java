@@ -1,5 +1,7 @@
 package com.practo.instahms.pubsub.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.practo.instahms.pubsub.util.ClientStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,8 @@ import java.io.Serializable;
 @Setter
 @Getter
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClientRequest implements Serializable {
 
     @NotBlank
@@ -27,5 +31,5 @@ public class ClientRequest implements Serializable {
     private String userId;
 
     @Valid
-    private ClientStatus status;
+    private ClientStatus status = ClientStatus.offline;
 }

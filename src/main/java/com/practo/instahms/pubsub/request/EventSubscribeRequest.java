@@ -19,4 +19,6 @@ public class EventSubscribeRequest implements Serializable {
     private Options options = new Options();
 
     private String event;
+
+    private String client;
 }

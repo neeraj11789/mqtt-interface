@@ -69,6 +69,7 @@ public class ClientResource {
     @PostMapping("/{clientId}/subscribe")
     private ResponseEntity<Object> subscribe(final @PathVariable String clientId,
                                              final @Valid @RequestBody EventSubscribeRequest event ){
+        event.setClient( clientId );
         mqttService.subscribe( event );
         return ResponseEntity.status( HttpStatus.OK ).build();
     }

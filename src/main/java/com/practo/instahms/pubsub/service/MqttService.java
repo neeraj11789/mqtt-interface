@@ -1,8 +1,11 @@
 package com.practo.instahms.pubsub.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hivemq.client.mqtt.mqtt5.Mqtt5BlockingClient;
 import com.practo.instahms.pubsub.config.EventTopicConfiguration;
 import com.practo.instahms.pubsub.exception.UnSupportedEventException;
+import com.practo.instahms.pubsub.request.CallBackRequest;
 import com.practo.instahms.pubsub.request.EventPublishRequest;
 import com.practo.instahms.pubsub.request.EventSubscribeRequest;
 import com.practo.instahms.pubsub.service.callback.CallbackRequestHandler;
@@ -40,6 +43,9 @@ public class MqttService {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private ObjectMapper mapper;
+
     public void publish(final EventPublishRequest request){
         if(!topicConfiguration.getPractoEvent().containsKey( request.getEvent() )){
             throw new UnSupportedEventException( ExceptionHelper.EVENT_NOT_SUPPORTED.getCode(), ExceptionHelper.EVENT_NOT_SUPPORTED.getMessage() );
@@ -54,7 +60,7 @@ public class MqttService {
                 .send();
 
         // Save event for reference
-        eventService.persist(request);
+        eventService.persistEvent(request);
         log.info( "PUBLISHED_EVENT: {} on topic: {}. Request: {}", request.getEvent(), topic, request );
     }
 
@@ -64,6 +70,7 @@ public class MqttService {
                 .topicFilter(eventSubscribeRequest.getEvent())
                 .qos( eventSubscribeRequest.getOptions().getQos().getQosVal() )
                 .send();
+        eventService.persistEventSubscription(eventSubscribeRequest);
     }
 
     /**
@@ -77,6 +84,14 @@ public class MqttService {
             final String event = topicConfiguration.getPractoEvent().inverse().get( topic );
             log.info(" RECEIVED_EVENT: {} On Topic: {} Qos: {} Retain: {} with Payload: {}" , event, topic, publish.getQos(), publish.isRetain(), UTF_8.decode(publish.getPayload().get()));
 //            callbackHandler.execute(eventSubscribeRequest.getCallback());
+                eventService.getSubscribersForEvent(event).ifPresent( se -> {
+                    log.info( "Executing Callback for Client:{} with Payload:{}", se.getClient(), se.getCallback() );
+                    try {
+                        callbackHandler.execute( mapper.readValue( se.getCallback(), CallBackRequest.class ) );
+                    } catch (JsonProcessingException e) {
+                        log.error( "unable to serialize" );
+                    }
+                } );
         });
     }
 }
