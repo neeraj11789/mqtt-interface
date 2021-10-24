@@ -15,7 +15,7 @@ import java.util.List;
 @Where(clause = "is_active = 1")
 public class Event extends BaseDomain {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

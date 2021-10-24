@@ -24,7 +24,7 @@ import javax.validation.constraints.NotBlank;
 public class Client extends BaseDomain {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -36,7 +36,7 @@ public class Client extends BaseDomain {
     @NotBlank
     private String clientId;
 
-    @Column(nullable = false, columnDefinition = "varchar(32) default offline")
+    @Column(nullable = false, columnDefinition = "varchar(32) default 'offline'")
     @Enumerated(EnumType.STRING)
     private ClientStatus status;
 

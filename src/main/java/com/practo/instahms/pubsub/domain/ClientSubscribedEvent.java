@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Where(clause = "is_active = 1")
 public class ClientSubscribedEvent extends BaseDomain {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

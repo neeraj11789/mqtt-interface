@@ -1,11 +1,12 @@
 package com.practo.instahms.pubsub.config;
 
 import com.practo.instahms.pubsub.exception.BaseException;
+import com.practo.instahms.pubsub.exception.ClientAlreadyExistsException;
+import com.practo.instahms.pubsub.exception.ClientNotFoundException;
 import com.practo.instahms.pubsub.exception.UnSupportedEventException;
 import com.practo.instahms.pubsub.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.management.BadAttributeValueExpException;
 
 /**
  * @author Neeraj Gupta<neeraj11789@gmail.com>
@@ -45,7 +44,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request
      * @return
      */
-    @ExceptionHandler(value = {ChangeSetPersister.NotFoundException.class})
+    @ExceptionHandler(value = {ClientNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleNotFoundException(final BaseException notFoundException, final WebRequest request){
         return buildErrorResponse(notFoundException, HttpStatus.NOT_FOUND, notFoundException.getCode(), request);
@@ -57,7 +56,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @param request
      * @return
      */
-    @ExceptionHandler(value = {BadAttributeValueExpException.class})
+    @ExceptionHandler(value = {ClientAlreadyExistsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleBadRequestException(final BaseException baseException, final WebRequest request){
         log.error("Bad Request Exception", baseException );

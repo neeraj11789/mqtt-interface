@@ -1,10 +1,13 @@
 package com.practo.instahms.pubsub.service;
 
 import com.practo.instahms.pubsub.domain.Client;
+import com.practo.instahms.pubsub.exception.ClientAlreadyExistsException;
+import com.practo.instahms.pubsub.exception.ClientNotFoundException;
 import com.practo.instahms.pubsub.mapper.ClientRequestMapper;
 import com.practo.instahms.pubsub.repository.ClientRepository;
 import com.practo.instahms.pubsub.request.ClientRequest;
 import com.practo.instahms.pubsub.util.ClientStatus;
+import com.practo.instahms.pubsub.util.ExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +31,7 @@ public class ClientService {
 
     public void connectClient(final String clientId) {
         final Optional<Client> optionalClient = getClient( clientId );
-        final Client client = optionalClient.orElseThrow( () -> new RuntimeException( "client_not_found" ) );
+        final Client client = optionalClient.orElseThrow( () -> new ClientNotFoundException( ExceptionHelper.CLIENT_NOT_FOUND.getCode(), ExceptionHelper.CLIENT_NOT_FOUND.getMessage() ) );
         client.setStatus( ClientStatus.online );
         repository.save( client );
     }
@@ -37,7 +40,7 @@ public class ClientService {
         final Client client = ClientRequestMapper.INSTANCE.requestToClient( request );
         final Optional<Client> optionalClient = getClient( request.getClientId() );
         if(optionalClient.isPresent()){
-            throw new RuntimeException("client_already_exists");
+            throw new ClientAlreadyExistsException(ExceptionHelper.CLIENT_EXISTS.getCode(), ExceptionHelper.CLIENT_EXISTS.getMessage());
         }
         repository.save( client );
     }
@@ -45,7 +48,7 @@ public class ClientService {
     public void disconnectClient(final String clientId) {
         final Optional<Client> optionalClient = getClient( clientId );
         // @todo: Proper Exception Handling SpringBoot and Application
-        final Client client = optionalClient.orElseThrow( () -> new RuntimeException( "client_not_found" ) );
+        final Client client = optionalClient.orElseThrow( () -> new ClientNotFoundException( ExceptionHelper.CLIENT_NOT_FOUND.getCode(), ExceptionHelper.CLIENT_NOT_FOUND.getMessage() ) );
         client.setStatus( ClientStatus.offline );
         repository.save( client );
     }
