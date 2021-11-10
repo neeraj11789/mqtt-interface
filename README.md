@@ -38,15 +38,12 @@ The Use-case: LWT is a great way to notify other subscribed clients about the un
 
 ### TODOs
 - [ ] generalize MQTT using Interface
-- [ ] client authentication using API keys
-- [ ] generalize the authentication methods
 - [ ] integrate broker status - use LWT for knowing the latest connection status for client
-- [ ] add logging to all places
-- [x] log the requests and subscription details for clients
 - [ ] use persistent and clean session for different use-cases
 - [ ] swagger integration
-- [x] retain flag, QOS etc configurations
-- [ ] move token generation part to the user-service
+- [ ] Have a Generic Event Class having - eventType, eventId, entityType, entityId, Data, MetaDeta, source, sign etc 
+
+### Some more references
 - [ ] javadevjournal.com/spring/securing-a-restful-web-service-with-spring-security/
 - [ ] https://www.freecodecamp.org/news/how-to-setup-jwt-authorization-and-authentication-in-spring/
 - [ ] spring security for the authentication for services

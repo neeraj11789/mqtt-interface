@@ -47,7 +47,6 @@ public class ClientService {
 
     public void disconnectClient(final String clientId) {
         final Optional<Client> optionalClient = getClient( clientId );
-        // @todo: Proper Exception Handling SpringBoot and Application
         final Client client = optionalClient.orElseThrow( () -> new ClientNotFoundException( ExceptionHelper.CLIENT_NOT_FOUND.getCode(), ExceptionHelper.CLIENT_NOT_FOUND.getMessage() ) );
         client.setStatus( ClientStatus.offline );
         repository.save( client );

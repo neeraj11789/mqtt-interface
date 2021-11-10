@@ -71,8 +71,7 @@ public class EventService {
         clientSubscribedEvent.setCallback( mapper.writeValueAsString( request.getCallback() ) );
         subscribedEventRepository.save( clientSubscribedEvent );
     }
-
-    // @todo: This should return list of the subscribers
+    
     public List<ClientSubscribedEvent> getSubscribersForEvent(final String eventName) {
         List<ClientSubscribedEvent> subscribedEvents = new ArrayList<>();
         final Optional<Event> event = repository.findByEventEquals( eventName );
