@@ -32,3 +32,23 @@ The Use-case: LWT is a great way to notify other subscribed clients about the un
 ## QuickStart Tutotial - 
 - In 5 parts is great place to understand about MQTT
 - [Reference](https://www.hivemq.com/tags/mqtt-essentials/)
+- https://www.freecodecamp.org/news/best-practices-for-building-api-keys-97c26eabfea9/
+- https://www.hivemq.com/blog/mqtt-essentials-part-7-persistent-session-queuing-messages/
+- https://www.twilio.com/blog/5-ways-to-make-http-requests-in-java
+
+### TODOs
+- [ ] generalize MQTT using Interface
+- [ ] client authentication using API keys
+- [ ] generalize the authentication methods
+- [ ] integrate broker status - use LWT for knowing the latest connection status for client
+- [ ] add logging to all places
+- [x] log the requests and subscription details for clients
+- [ ] use persistent and clean session for different use-cases
+- [ ] swagger integration
+- [x] retain flag, QOS etc configurations
+- [ ] move token generation part to the user-service
+- [ ] javadevjournal.com/spring/securing-a-restful-web-service-with-spring-security/
+- [ ] https://www.freecodecamp.org/news/how-to-setup-jwt-authorization-and-authentication-in-spring/
+- [ ] spring security for the authentication for services
+- [ ] explore MQTT-5 features - https://www.hivemq.com/tags/mqtt-5-essentials/
+- [ ] explore the Plugins for Hive - Majorly webhook for events for production purpose
